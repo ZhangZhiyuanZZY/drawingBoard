@@ -17,7 +17,7 @@
 
 #import <Masonry.h>
 
-@interface ViewController ()
+@interface ViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 //顶部功能条
 @property(nonatomic, strong)UIToolbar *topView;
 //画板
@@ -37,6 +37,89 @@
     [self setupUI];
 }
 
+#pragma mark - 顶部条功能
+///清屏
+- (void)cleanScreen
+{
+    [self.drawBoardView cleanScreen];
+}
+
+///撤销
+- (void)revokeButton
+{
+    [self.drawBoardView revokeButton];
+}
+
+///橡皮差
+- (void)eraserButton
+{
+    self.drawBoardView.colorPath = [UIColor whiteColor];
+}
+
+///保存
+- (void)saveButton
+{
+    UIGraphicsBeginImageContext(self.drawBoardView.bounds.size);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    [self.drawBoardView.layer renderInContext:ctx];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+    //    NSLog(@"%@", ctx);
+}
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
+{
+    if (error) {
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    } else {
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    }
+}
+
+///照片功能
+- (void)setupPhotos
+{
+    UIImagePickerController *picker = [[UIImagePickerController alloc]init];
+    picker.delegate = self;
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    [self presentViewController:picker animated:YES completion:nil];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+{
+    UIImage *image = info[UIImagePickerControllerOriginalImage];
+    self.drawBoardView.imageSave = image;
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - bottom功能
+//颜色
+- (void)blueColor
+{
+    self.drawBoardView.colorPath = [UIColor blueColor];
+}
+
+- (void)greenColor
+{
+    self.drawBoardView.colorPath = [UIColor greenColor];
+}
+
+- (void)yellowColor
+{
+    self.drawBoardView.colorPath = [UIColor yellowColor];
+}
+
+//width
+- (void)widthLine
+{
+    self.drawBoardView.width = self.slider.value;
+}
+
+#pragma mark - 设置UI
 - (void)setupUI
 {
     //1.设置功能条
@@ -55,9 +138,10 @@
     UIBarButtonItem *cleanButton = [[UIBarButtonItem alloc]initWithTitle:@"清屏" style:UIBarButtonItemStylePlain target:self action:@selector(cleanScreen)];
     UIBarButtonItem *revokeButton = [[UIBarButtonItem alloc]initWithTitle:@"撤销" style:UIBarButtonItemStyleDone target:self action:@selector(revokeButton)];
     UIBarButtonItem *eraserButton = [[UIBarButtonItem alloc]initWithTitle:@"橡皮差" style:UIBarButtonItemStylePlain target:self action:@selector(eraserButton)];
+    UIBarButtonItem *photoButton = [[UIBarButtonItem alloc]initWithTitle:@"照片" style:UIBarButtonItemStylePlain target:self action:@selector(setupPhotos)];
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
     UIBarButtonItem *saveButton = [[UIBarButtonItem alloc]initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(saveButton)];
-    NSArray *arrayItem = @[cleanButton, revokeButton, eraserButton, flexibleSpace, saveButton];
+    NSArray *arrayItem = @[cleanButton, revokeButton, eraserButton, photoButton, flexibleSpace, saveButton];
     [self.topView setItems:arrayItem animated:YES];
    
     //2.设置底部
@@ -73,6 +157,7 @@
     //添加功能
     UISlider *sliderH = [[UISlider alloc]init];
     self.slider = sliderH;
+    self.slider.tintColor = [UIColor blackColor];
     sliderH.minimumValue = 1;
     sliderH.maximumValue = 10;
     [sliderH addTarget:self action:@selector(widthLine) forControlEvents:UIControlEventTouchUpInside];
@@ -124,50 +209,6 @@
         make.bottom.equalTo(self.bottomView.top);
         make.left.right.equalTo(self.view);
     }];
-    
-    
-}
-
-- (void)cleanScreen
-{
-    NSLog(@"清屏");
-}
-
-- (void)revokeButton
-{
-    NSLog(@"撤销");
-}
-
-- (void)eraserButton
-{
-    NSLog(@"橡皮差");
-}
-
-- (void)saveButton
-{
-    NSLog(@"保存");
-}
-
-//颜色
-- (void)blueColor
-{
-    self.drawBoardView.colorPath = [UIColor blueColor];
-}
-
-- (void)greenColor
-{
-    self.drawBoardView.colorPath = [UIColor greenColor];
-}
-
-- (void)yellowColor
-{
-    self.drawBoardView.colorPath = [UIColor yellowColor];
-}
-
-//width
-- (void)widthLine
-{
-    self.drawBoardView.width = self.slider.value;
 }
 
 #pragma mark - 懒加载

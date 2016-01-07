@@ -13,4 +13,11 @@
 @property(nonatomic, strong)UIColor *colorPath;
 //lineWidth
 @property(assign, nonatomic)CGFloat width;
+///图片保存
+@property(nonatomic, strong)UIImage *imageSave;
+
+///撤销
+- (void)revokeButton;
+///清屏
+- (void)cleanScreen;
 @end
