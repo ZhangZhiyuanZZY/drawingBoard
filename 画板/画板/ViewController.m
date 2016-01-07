@@ -24,7 +24,6 @@
 @property(nonatomic, strong)ZYDrawBoard *drawBoardView;
 //底部功能条
 @property(nonatomic, strong)UIView *bottomView;
-
 @end
 
 @implementation ViewController
@@ -80,6 +79,7 @@
     UIButton *blueBtn = [[UIButton alloc]init];
     [self.bottomView addSubview:blueBtn];
     blueBtn.backgroundColor = [UIColor blueColor];
+    [blueBtn addTarget:self action:@selector(blueColor) forControlEvents:UIControlEventTouchUpInside];
     [blueBtn makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(sliderH.bottom).offset(0);
         make.left.equalTo(self.bottomView).offset(10);
@@ -88,6 +88,7 @@
     UIButton *greenBtn = [[UIButton alloc]init];
     [self.bottomView addSubview:greenBtn];
     greenBtn.backgroundColor = [UIColor greenColor];
+    [greenBtn addTarget:self action:@selector(greenColor) forControlEvents:UIControlEventTouchUpInside];
     [greenBtn makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(blueBtn.right).offset(10);
         make.top.equalTo(blueBtn);
@@ -96,6 +97,7 @@
     }];
     UIButton *yellowBtn = [[UIButton alloc]init];
     yellowBtn.backgroundColor = [UIColor yellowColor];
+    [yellowBtn addTarget:self action:@selector(yellowColor) forControlEvents:UIControlEventTouchUpInside];
     [self.bottomView addSubview:yellowBtn];
     [yellowBtn makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(greenBtn.right).offset(10);
@@ -137,6 +139,34 @@
 - (void)saveButton
 {
     NSLog(@"保存");
+}
+
+//颜色
+- (void)blueColor
+{
+    self.drawBoardView.colorPath = [UIColor blueColor];
+    NSLog(@"%s", __FUNCTION__);
+}
+
+- (void)greenColor
+{
+    self.drawBoardView.colorPath = [UIColor greenColor];
+    NSLog(@"%s", __FUNCTION__);
+}
+
+- (void)yellowColor
+{
+    self.drawBoardView.colorPath = [UIColor yellowColor];
+    NSLog(@"%s", __FUNCTION__);
+}
+
+#pragma mark - 懒加载
+- (ZYDrawBoard *)drawBoardView
+{
+    if (!_drawBoardView) {
+        _drawBoardView = [[ZYDrawBoard alloc]init];
+    }
+    return _drawBoardView;
 }
 
 @end

@@ -10,4 +10,12 @@
 
 @implementation ZYDrawPath
 
++ (instancetype)pathWithColor:(UIColor *)color width:(CGFloat)width
+{
+    ZYDrawPath *path = [[ZYDrawPath alloc]init];
+    path.color = color;
+    path.lineWidth = width;
+    
+    return path;
+}
 @end

@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface ZYDrawBoard : UIView
-
+//颜色
+@property(nonatomic, strong)UIColor *colorPath;
 @end
