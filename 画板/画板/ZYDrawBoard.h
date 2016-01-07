@@ -11,4 +11,6 @@
 @interface ZYDrawBoard : UIView
 //颜色
 @property(nonatomic, strong)UIColor *colorPath;
+//lineWidth
+@property(assign, nonatomic)CGFloat width;
 @end

@@ -33,6 +33,11 @@
     _colorPath = colorPath;
 }
 
+- (void)setWidth:(CGFloat)width
+{
+    _width = width;
+}
+
 ///根据集合获得触摸点
 - (CGPoint)pointWithTouches:(NSSet *)touches
 {
@@ -45,7 +50,7 @@
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     CGPoint beginPoint = [self pointWithTouches:touches];
-    ZYDrawPath *bzrPath = [ZYDrawPath pathWithColor:self.colorPath width:10];
+    ZYDrawPath *bzrPath = [ZYDrawPath pathWithColor:self.colorPath width:self.width];
     [bzrPath moveToPoint:beginPoint];
     //记录路径
     self.path = bzrPath;

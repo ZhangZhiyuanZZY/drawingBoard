@@ -24,6 +24,9 @@
 @property(nonatomic, strong)ZYDrawBoard *drawBoardView;
 //底部功能条
 @property(nonatomic, strong)UIView *bottomView;
+//lineWidth
+@property(nonatomic, strong)UISlider *slider;
+
 @end
 
 @implementation ViewController
@@ -69,6 +72,10 @@
     
     //添加功能
     UISlider *sliderH = [[UISlider alloc]init];
+    self.slider = sliderH;
+    sliderH.minimumValue = 1;
+    sliderH.maximumValue = 10;
+    [sliderH addTarget:self action:@selector(widthLine) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:sliderH];
     [sliderH makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.equalTo(self.bottomView).offset(10);
@@ -145,19 +152,22 @@
 - (void)blueColor
 {
     self.drawBoardView.colorPath = [UIColor blueColor];
-    NSLog(@"%s", __FUNCTION__);
 }
 
 - (void)greenColor
 {
     self.drawBoardView.colorPath = [UIColor greenColor];
-    NSLog(@"%s", __FUNCTION__);
 }
 
 - (void)yellowColor
 {
     self.drawBoardView.colorPath = [UIColor yellowColor];
-    NSLog(@"%s", __FUNCTION__);
+}
+
+//width
+- (void)widthLine
+{
+    self.drawBoardView.width = self.slider.value;
 }
 
 #pragma mark - 懒加载
