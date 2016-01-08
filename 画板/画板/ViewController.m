@@ -17,7 +17,7 @@
 
 #import <Masonry.h>
 
-@interface ViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface ViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, MBProgressHUDDelegate>
 //顶部功能条
 @property(nonatomic, strong)UIToolbar *topView;
 //画板
@@ -71,12 +71,17 @@
 
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
 {
+    
     if (error) {
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.delegate = self;
+        hud.labelText = @"保存失败!";
+        [hud hide:YES afterDelay:1.0];
     } else {
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.delegate = self;
+        hud.labelText = @"保存成功!";
+        [hud hide:YES afterDelay:1.0];
     }
 }
 
