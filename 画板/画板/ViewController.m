@@ -76,12 +76,18 @@
         hud.labelText = @"保存失败!";
         [hud hide:YES afterDelay:1.0];
     } else {
-        MBProgressHUD *hud= [[MBProgressHUD alloc]initWithView:self.view];
-        hud.customView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"F82975F2-B6EA-4211-BF40-831E89AA90BD"]];
-        hud.mode = MBProgressHUDModeCustomView;
-        hud.labelText = @"保存成功";
-        [hud show:YES];
-        [hud hide:YES afterDelay:3.0];
+        MBProgressHUD *hud = [[MBProgressHUD alloc]initWithView:self.view];
+         [self.view addSubview:hud];
+        hud.labelText = @"好饿...";
+        hud.detailsLabelText = @"吃点啥????";
+        //这个方法用于真正做加载数据, 浪费时间的操作.
+        [hud showAnimated:YES whileExecutingBlock:^{
+            NSLog(@"do something...");
+            [NSThread sleepForTimeInterval:2.0];
+    } completionBlock:^{
+        [hud removeFromSuperview];
+    }];
+
     }
 }
 
