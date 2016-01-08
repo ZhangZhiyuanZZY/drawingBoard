@@ -66,23 +66,31 @@
     UIGraphicsEndImageContext();
     
     UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
-    //    NSLog(@"%@", ctx);
 }
 
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
 {
-    
     if (error) {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.delegate = self;
         hud.labelText = @"保存失败!";
         [hud hide:YES afterDelay:1.0];
     } else {
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.delegate = self;
-        hud.labelText = @"保存成功!";
-        [hud hide:YES afterDelay:1.0];
+        MBProgressHUD *hud= [[MBProgressHUD alloc]initWithView:self.view];
+        hud.customView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"F82975F2-B6EA-4211-BF40-831E89AA90BD"]];
+        hud.mode = MBProgressHUDModeCustomView;
+        hud.labelText = @"保存成功";
+        [hud show:YES];
+        [hud hide:YES afterDelay:3.0];
     }
+}
+
+//hud代理方法
+- (void)hudWasHidden:(MBProgressHUD *)hud
+{
+    [hud removeFromSuperview];
+    hud = nil;
+    NSLog(@"%@", hud);
 }
 
 ///照片功能
